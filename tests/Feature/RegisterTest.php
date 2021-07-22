@@ -44,7 +44,16 @@ class RegisterTest extends TestCase
         ];
 
         $this->postJson(route('api.register'), $form)
-            ->assertCreated();
+            ->assertCreated()
+            ->assertJsonStructure([
+                'status',
+                'data' => [
+                    'user',
+                    'account',
+                    'token',
+                    'expires_in'
+                ],
+            ]);
 
         $this->assertDatabaseHas('users', [
             'first_name' => $form['first_name'],
@@ -65,6 +74,11 @@ class RegisterTest extends TestCase
             'user_id' => $user->id,
             'type_id' => $type->id,
             'name' => $form['business_name'],
+        ]);
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'tokenable_type' => $user->getMorphClass(),
+            'tokenable_id' => $user->id
         ]);
     }
 }
