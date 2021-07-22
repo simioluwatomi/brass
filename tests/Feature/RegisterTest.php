@@ -29,8 +29,6 @@ class RegisterTest extends TestCase
     /** @test */
     public function guest_users_can_register_and_create_an_account()
     {
-        // given there is a guest user
-        // when the user makes a request to the register endpoint with the required data
         $type = AccountType::first();
 
         $form = [
@@ -63,7 +61,6 @@ class RegisterTest extends TestCase
 
         $this->assertTrue(Hash::check($form['pin'], $user->pin));
 
-        // account is created for that user
         $this->assertDatabaseHas('accounts', [
             'user_id' => $user->id,
             'type_id' => $type->id,

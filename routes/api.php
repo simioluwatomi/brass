@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,10 +22,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->name('api.')->group(function () {
 
-    Route::group(['middleware' => 'guest:api'], function () {
-
+    Route::group(['middleware' => 'guest:sanctum'], function () {
         Route::post('register', RegisterController::class)->name('register');
 
+        Route::post('login', [AuthenticationController::class, 'store'])->name('login');
+    });
+
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('logout', [AuthenticationController::class, 'destroy'])->name('logout');
     });
 
 });
