@@ -12,32 +12,39 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * @inheritdoc
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * @inheritdoc
      */
     protected $hidden = [
         'password',
+        'pin',
         'remember_token',
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * {@inheritdoc}
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $appends = ['full_name'];
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * A user has many accounts.
+     */
+    public function accounts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Account::class, 'user_id');
+    }
 }
