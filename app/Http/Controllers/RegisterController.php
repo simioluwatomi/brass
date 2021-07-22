@@ -32,9 +32,13 @@ class RegisterController extends ApiController
             'status' => AccountStatus::ACTIVE
         ]);
 
+        $token = $user->createToken(config('auth.token.name'));
+
         return $this->respondCreated([
             'user' => new UserResource($user),
-            'account' => new AccountResource($account)
+            'account' => new AccountResource($account),
+            'token'      => $token->plainTextToken,
+            'expires_in' => now()->diffInSeconds(now()->addRealMinutes(config('sanctum.expiration'))),
         ]);
     }
 }

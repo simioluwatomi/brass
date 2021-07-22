@@ -29,8 +29,6 @@ class RegisterTest extends TestCase
     /** @test */
     public function guest_users_can_register_and_create_an_account()
     {
-        // given there is a guest user
-        // when the user makes a request to the register endpoint with the required data
         $type = AccountType::first();
 
         $form = [
@@ -46,7 +44,16 @@ class RegisterTest extends TestCase
         ];
 
         $this->postJson(route('api.register'), $form)
-            ->assertCreated();
+            ->assertCreated()
+            ->assertJsonStructure([
+                'status',
+                'data' => [
+                    'user',
+                    'account',
+                    'token',
+                    'expires_in'
+                ],
+            ]);
 
         $this->assertDatabaseHas('users', [
             'first_name' => $form['first_name'],
@@ -63,11 +70,15 @@ class RegisterTest extends TestCase
 
         $this->assertTrue(Hash::check($form['pin'], $user->pin));
 
-        // account is created for that user
         $this->assertDatabaseHas('accounts', [
             'user_id' => $user->id,
             'type_id' => $type->id,
             'name' => $form['business_name'],
+        ]);
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'tokenable_type' => $user->getMorphClass(),
+            'tokenable_id' => $user->id
         ]);
     }
 }
