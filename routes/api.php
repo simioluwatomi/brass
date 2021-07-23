@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountVerificationController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\RegisterController;
@@ -33,6 +34,8 @@ Route::prefix('v1')->name('api.')->group(function () {
         Route::post('logout', [AuthenticationController::class, 'destroy'])->name('logout');
 
         Route::get('banks', [BankController::class, 'index'])->name('banks.index');
+
+        Route::post('account/verify', AccountVerificationController::class)->name('verify-account');
     });
 
 });
