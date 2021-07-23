@@ -5,6 +5,8 @@ namespace App\Services;
 use App\DataTransferObjects\BaseDTOCollection;
 use App\DataTransferObjects\PaystackAccountObject;
 use App\DataTransferObjects\PaystackBankObject;
+use App\DataTransferObjects\PaystackTransferObject;
+use App\DataTransferObjects\PaystackTransferRecipientObject;
 use Illuminate\Http\Client\PendingRequest;
 
 class PaystackClient extends PendingRequest
@@ -51,5 +53,30 @@ class PaystackClient extends PendingRequest
         $response->throw();
 
         return PaystackAccountObject::create($response->json(['data']));
+    }
+
+    /**
+     * @link https://paystack.com/docs/api/#transfer-recipient-create
+     *
+     * @param array $data
+     *
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function createTransferRecipient(array $data): PaystackTransferRecipientObject
+    {
+        $response = $this->post('transferrecipient', $data);
+
+        $response->throw();
+
+        return PaystackTransferRecipientObject::create($response->json()['data']);
+    }
+
+    public function transfer(array $data)
+    {
+        $response = $this->post('transfer', $data);
+
+        $response->throw();
+
+        return PaystackTransferObject::create($response->json()['data']);
     }
 }
