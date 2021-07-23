@@ -13,7 +13,9 @@
         "laravel/framework": "^8.40",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "propaganistas/laravel-phone": "^4.3"
+        "moneyphp/money": "^3.3",
+        "propaganistas/laravel-phone": "^4.3",
+        "spatie/data-transfer-object": "^2.8"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
