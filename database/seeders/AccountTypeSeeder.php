@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AccountType;
 use App\Options\DefaultAccountTypes;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class AccountTypeSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class AccountTypeSeeder extends Seeder
         foreach ($types as $key => $value) {
             AccountType::factory()->create([
                 'name' => ucfirst($value),
-                'slug' => $value,
+                'slug' => Str::slug($value),
             ]);
 
             $this->command->info("Account type {$value} seeded");
