@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Transaction extends Model
+class Transaction extends Pivot
 {
-    use HasFactory;
+    /**
+     * @inheritdoc
+     */
+    public $incrementing = true;
 
     /**
      * @inheritdoc

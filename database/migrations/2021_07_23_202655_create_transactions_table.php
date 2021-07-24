@@ -15,9 +15,10 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('debit_transaction_id')->constrained('transaction_entries');
-            $table->foreignId('credit_transaction_id')->constrained('transaction_entries');
+            $table->foreignId('debit_entry')->constrained('transaction_entries');
+            $table->foreignId('credit_entry')->constrained('transaction_entries');
             $table->timestamps();
+            $table->unique(['debit_entry', 'credit_entry']);
         });
     }
 
