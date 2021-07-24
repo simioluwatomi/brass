@@ -10,4 +10,7 @@ class PaystackOptions
 
     public const TRANSFER_RECIPIENT_TYPE = 'nuban';
 
+    public const WEBHOOK_HEADER = 'X-Paystack-Signature';
+
+    public const NAME = 'paystack';
 }

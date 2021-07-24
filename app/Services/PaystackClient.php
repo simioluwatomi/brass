@@ -79,4 +79,20 @@ class PaystackClient extends PendingRequest
 
         return PaystackTransferObject::create($response->json()['data']);
     }
+
+    /**
+     * @link https://paystack.com/docs/api/#transfer-fetch
+     *
+     * @param string $code
+     *
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function getTransfer(string $code): PaystackTransferObject
+    {
+        $response = $this->get("transfer/$code");
+
+        $response->throw();
+
+        return PaystackTransferObject::create($response->json(['data']));
+    }
 }
