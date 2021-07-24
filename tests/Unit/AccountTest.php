@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Account;
 use App\Models\AccountType;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -57,5 +58,17 @@ class AccountTest extends TestCase
     public function it_belongs_to_an_account_type()
     {
         $this->assertInstanceOf(AccountType::class, $this->account->type);
+    }
+
+    /** @test */
+    public function it_has_many_credit_transaction_entries()
+    {
+        $this->assertInstanceOf(Collection::class, $this->account->creditTransactionEntries);
+    }
+
+    /** @test */
+    public function it_has_many_debit_transaction_entries()
+    {
+        $this->assertInstanceOf(Collection::class, $this->account->debitTransactionEntries);
     }
 }

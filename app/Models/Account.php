@@ -29,4 +29,24 @@ class Account extends Model
     {
         return $this->belongsTo(AccountType::class, 'type_id');
     }
+
+    /**
+     * An account has many debit transaction entries.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function debitTransactionEntries()
+    {
+        return $this->hasMany(TransactionEntry::class, 'debit_account_id');
+    }
+
+    /**
+     * An account has many credit transaction entries.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function creditTransactionEntries()
+    {
+        return $this->hasMany(TransactionEntry::class, 'credit_account_id');
+    }
 }

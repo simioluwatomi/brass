@@ -33,7 +33,6 @@ class AccountTypeTest extends TestCase
                 'interest_rate',
                 'monthly_maintenance_charge',
                 'minimum_balance',
-                'daily_transfer_limit',
                 'created_at',
                 'updated_at',
             ])
