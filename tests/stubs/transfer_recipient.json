@@ -1,0 +1,27 @@
+{
+    "status": true,
+    "message": "Transfer recipient created successfully",
+    "data": {
+        "active": true,
+        "createdAt": "2021-07-23T08:05:40.000Z",
+        "currency": "NGN",
+        "description": null,
+        "domain": "test",
+        "email": null,
+        "id": 27,
+        "integration": 428626,
+        "metadata": null,
+        "name": "Customer",
+        "recipient_code": "RCP_t0ya41mp35flk40",
+        "type": "nuban",
+        "updatedAt": "2021-07-23T08:05:40.000Z",
+        "is_deleted": false,
+        "details": {
+            "authorization_code": null,
+            "account_number": "0100000010",
+            "account_name": "OLUWATOMI SIMILOLUWA",
+            "bank_code": "044",
+            "bank_name": "Access Bank"
+        }
+    }
+}

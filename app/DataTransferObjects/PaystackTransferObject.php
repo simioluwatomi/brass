@@ -18,7 +18,7 @@ class PaystackTransferObject extends FlexibleDataTransferObject
     /** @var string */
     public $source;
 
-    /** @var int $recipient */
+    /** @var int */
     public $recipient;
 
     /** @var mixed */

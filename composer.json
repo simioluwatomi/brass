@@ -15,7 +15,8 @@
         "laravel/tinker": "^2.5",
         "moneyphp/money": "^3.3",
         "propaganistas/laravel-phone": "^4.3",
-        "spatie/data-transfer-object": "^2.8"
+        "spatie/data-transfer-object": "^2.8",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

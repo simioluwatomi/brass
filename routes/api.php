@@ -4,6 +4,8 @@ use App\Http\Controllers\AccountVerificationController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionEntryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +38,8 @@ Route::prefix('v1')->name('api.')->group(function () {
         Route::get('banks', [BankController::class, 'index'])->name('banks.index');
 
         Route::post('account/verify', AccountVerificationController::class)->name('verify-account');
+
+        Route::post('transactions', [TransactionEntryController::class, 'store'])->name('transactions.store');
     });
 
 });

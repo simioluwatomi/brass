@@ -36,10 +36,10 @@ class PaystackTransferRecipientObject extends FlexibleDataTransferObject
     /** @var mixed */
     public $is_deleted;
 
-    /** @var PaystackTransferRecipientDetailsObject $details|mixed */
+    /** @var mixed|\App\DataTransferObjects\PaystackTransferRecipientDetailsObject $details */
     public $account_details;
 
-    /** @var PaystackTransferRecipientMetadataObject $metadata|mixed */
+    /** @var mixed|\App\DataTransferObjects\PaystackTransferRecipientMetadataObject $metadata */
     public $metadata;
 
     /** @var \Carbon\Carbon */
