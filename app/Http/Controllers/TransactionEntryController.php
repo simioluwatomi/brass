@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Resources\TransactionEntryResource;
 use App\Models\Account;
-use App\Models\Transaction;
 use App\Models\TransactionEntry;
-use App\Models\User;
 use App\Options\PaystackOptions;
 use App\Options\TransactionEntryTypes;
 use App\Options\TransactionEntryStatus;
@@ -35,9 +33,9 @@ class TransactionEntryController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+     * @param StoreTransactionRequest $request
+     * @param PaystackClient          $client
+      */
     public function store(StoreTransactionRequest $request, PaystackClient $client)
     {
         try {
@@ -60,7 +58,7 @@ class TransactionEntryController extends ApiController
             $paystackRecipient = $client->createTransferRecipient([
                 "type" => PaystackOptions::TRANSFER_RECIPIENT_TYPE,
                 "name" => $request->input('credit_account_name'),
-                "account_number" => $request->input('credit_account_name'),
+                "account_number" => $request->input('credit_account_number'),
                 "bank_code" => $request->input('credit_bank_code'),
                 "currency" => $debitAccount->type->currency
             ]);
@@ -99,10 +97,7 @@ class TransactionEntryController extends ApiController
                 'meta_data' => $paystackTransfer->toArray(),
             ]);
 
-            Transaction::create([
-                'debit_transaction_id' => $debitTransactionEntry->id,
-                'credit_transaction_id' => $creditTransactionEntry->id
-            ]);
+            $debitTransactionEntry->credit()->sync($creditTransactionEntry->id);
 
             $balance = $debitAccount->available_balance + $debitTransactionEntry->amount;
 

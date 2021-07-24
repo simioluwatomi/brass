@@ -41,7 +41,6 @@ class StoreTransactionRequest extends FormRequest
             ],
             'description'                => ['nullable', 'string', 'max:255'],
             'pin'                        => ['required', 'numeric', 'digits:4', new Pin()],
-            'remember'                   => ['boolean'],
             'reference'      => ['required', 'unique:transaction_entries,reference'],
         ];
     }
