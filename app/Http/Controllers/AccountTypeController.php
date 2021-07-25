@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AccountResource;
-use App\Models\Account;
+use App\Http\Resources\AccountTypeResource;
+use App\Models\AccountType;
 use Illuminate\Http\Request;
 
-class AccountController extends ApiController
+class AccountTypeController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,23 +15,12 @@ class AccountController extends ApiController
      */
     public function index(Request $request)
     {
-        $accounts = Account::query()
-            ->where('user_id', auth()->id())
+        $types = AccountType::query()
             ->orderBy('name')
             ->jsonPaginate()
             ->appends($request->all());
 
-        return $this->respond(['accounts' => AccountResource::collection($accounts)->response()->getData(true)]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->respond(['account_types' => AccountTypeResource::collection($types)->response()->getData(true)]);
     }
 
     /**
@@ -48,21 +37,10 @@ class AccountController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Account $account)
+    public function show($id)
     {
         //
     }
@@ -71,10 +49,10 @@ class AccountController extends ApiController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -82,10 +60,10 @@ class AccountController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Account  $account
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account)
+    public function destroy($id)
     {
         //
     }
