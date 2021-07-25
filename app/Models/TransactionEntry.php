@@ -60,12 +60,22 @@ class TransactionEntry extends Model
         return $this->belongsTo(Account::class, 'credit_account_id');
     }
 
+    /**
+     * A transaction entry belongs to a bank.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'external_bank_code', 'code');
+    }
+
     public function queryBuilderFilterFields(): array
     {
         return array_values(
             array_diff(
                 Schema::getColumnListing($this->getTable()),
-                ['meta_data', 'updated_at', 'created_at', 'description', 'currency']
+                ['meta_data', 'updated_at', 'created_at', 'description', 'currency', 'status']
             )
         );
     }
@@ -73,7 +83,7 @@ class TransactionEntry extends Model
     public function queryBuilderSortFields(): array
     {
         return array_values(
-            array_diff(Schema::getColumnListing($this->getTable()), ['meta_data', 'description', 'updated_at'])
+            array_diff(Schema::getColumnListing($this->getTable()), ['meta_data', 'description', 'updated_at', 'currency', 'status'])
         );
     }
 
