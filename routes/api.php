@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountTransactionController;
 use App\Http\Controllers\AccountVerificationController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BankController;
@@ -40,6 +41,8 @@ Route::prefix('v1')->name('api.')->group(function () {
         Route::post('account/verify', AccountVerificationController::class)->name('verify-account');
 
         Route::post('transactions', [TransactionEntryController::class, 'store'])->name('transactions.store');
+
+        Route::get('accounts/{account}/transactions', AccountTransactionController::class)->name('accounts.transactions.index');
     });
 
 });
