@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3",
+        "ext-json": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -16,7 +17,7 @@
         "moneyphp/money": "^3.3",
         "propaganistas/laravel-phone": "^4.3",
         "spatie/data-transfer-object": "^2.8",
-        "ext-json": "*"
+        "spatie/laravel-query-builder": "^3.5"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
