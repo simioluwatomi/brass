@@ -83,13 +83,13 @@ class PaystackClient extends PendingRequest
     /**
      * @link https://paystack.com/docs/api/#transfer-fetch
      *
-     * @param string $code
+     * @param string $reference
      *
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function getTransfer(string $code): PaystackTransferObject
+    public function getTransfer(string $reference): PaystackTransferObject
     {
-        $response = $this->get("transfer/$code");
+        $response = $this->get("transfer/$reference");
 
         $response->throw();
 

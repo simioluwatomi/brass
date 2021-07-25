@@ -16,10 +16,10 @@ class PaystackTransferObject extends FlexibleDataTransferObject
     public $recipient_id;
 
     /** @var string */
-    public $reference;
+    public $transfer_code;
 
     /** @var mixed */
-    public $paystack_reference;
+    public $reference;
 
     /** @var string */
     public $source;
@@ -65,8 +65,8 @@ class PaystackTransferObject extends FlexibleDataTransferObject
         return new self([
             'id' => $data['id'],
             'integration' => $data['integration'] ?? null,
-            'reference' => $data['transfer_code'],
-            'paystack_reference' => $data['reference'] ?? null,
+            'transfer_code' => $data['transfer_code'],
+            'reference' => $data['reference'] ?? null,
             'source' => $data['source'],
             'source_details' => $data['source_details'] ?? null,
             'recipient_id' => is_int($data['recipient']) ? $data['recipient'] : null,

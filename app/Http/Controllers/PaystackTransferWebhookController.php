@@ -41,7 +41,7 @@ class PaystackTransferWebhookController extends ApiController
         try {
             DB::beginTransaction();
 
-            $transferObject = $this->client->getTransfer($request->input('data')['transfer_code']);
+            $transferObject = $this->client->getTransfer($request->input('data')['reference']);
 
             $transactionEntry = TransactionEntry::query()
                 ->with(['credit'])
