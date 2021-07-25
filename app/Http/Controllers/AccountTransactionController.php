@@ -8,13 +8,13 @@ use App\Models\TransactionEntry;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class AccountTransactionController extends Controller
+class AccountTransactionController extends ApiController
 {
     /**
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke(Account $account, Request $request)
     {

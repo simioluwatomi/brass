@@ -31,7 +31,7 @@ trait JsonExceptionHandlerTrait
     }
 
     /**
-     * Returns JSON response for Eloquent model not found exception.
+     * Returns JSON response for HTTP Client Request Exception.
      *
      * @param Throwable $exception
      *
@@ -58,15 +58,6 @@ trait JsonExceptionHandlerTrait
         );
     }
 
-    protected function validationError(Throwable $exception)
-    {
-        /* @var $exception ValidationException */
-        return $this->respondWithError(
-            $exception->validator->errors()->first(),
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        );
-    }
-
     protected function authorizationError(Throwable $exception)
     {
         return $this->respondWithError(
@@ -80,21 +71,6 @@ trait JsonExceptionHandlerTrait
         return $this->respondWithError(
             $exception->getMessage(),
             Response::HTTP_UNAUTHORIZED
-        );
-    }
-
-    /**
-     * Returns JSON response for idempotent header exception.
-     *
-     * @param Throwable $exception
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function idempotentHeaderError(Throwable $exception)
-    {
-        return $this->respondWithError(
-            "{$exception->getMessage()}",
-            $exception->getCode()
         );
     }
 
