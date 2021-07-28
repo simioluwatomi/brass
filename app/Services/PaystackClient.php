@@ -7,6 +7,7 @@ use App\DataTransferObjects\PaystackAccountObject;
 use App\DataTransferObjects\PaystackBankObject;
 use App\DataTransferObjects\PaystackTransferObject;
 use App\DataTransferObjects\PaystackTransferRecipientObject;
+use App\Exceptions\PaystackException;
 use Illuminate\Http\Client\PendingRequest;
 
 class PaystackClient extends PendingRequest
@@ -18,7 +19,7 @@ class PaystackClient extends PendingRequest
      * @param string $country
      * @param bool   $cursor
      *
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws PaystackException
      */
     public function getBanks(int $perPage = 100, string $country = 'nigeria', bool $cursor = true): \Illuminate\Support\Collection
     {
@@ -28,7 +29,9 @@ class PaystackClient extends PendingRequest
             'use_cursor' => $cursor
         ]);
 
-        $response->throw();
+        if ($response->failed()) {
+            throw PaystackException::create($response->json()['message']);
+        }
 
         $banks = BaseDTOCollection::create($response->json()['data'], PaystackBankObject::class);
 
@@ -41,7 +44,7 @@ class PaystackClient extends PendingRequest
      * @param string $account
      * @param string $bankCode
      *
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws PaystackException
      */
     public function verifyAccount(string $account, string $bankCode): PaystackAccountObject
     {
@@ -50,7 +53,9 @@ class PaystackClient extends PendingRequest
             'bank_code' => $bankCode,
         ]);
 
-        $response->throw();
+        if ($response->failed()) {
+            throw PaystackException::create($response->json()['message']);
+        }
 
         return PaystackAccountObject::create($response->json(['data']));
     }
@@ -60,22 +65,33 @@ class PaystackClient extends PendingRequest
      *
      * @param array $data
      *
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws PaystackException
      */
     public function createTransferRecipient(array $data): PaystackTransferRecipientObject
     {
         $response = $this->post('transferrecipient', $data);
 
-        $response->throw();
+        if ($response->failed()) {
+            throw PaystackException::create($response->json()['message']);
+        }
 
         return PaystackTransferRecipientObject::create($response->json()['data']);
     }
 
-    public function transfer(array $data)
+    /**
+     * @link https://paystack.com/docs/transfers/single-transfers#initiate-a-transfer
+     *
+     * @param array $data
+     *
+     * @throws PaystackException
+     */
+    public function transfer(array $data): PaystackTransferObject
     {
         $response = $this->post('transfer', $data);
 
-        $response->throw();
+        if ($response->failed()) {
+            throw PaystackException::create($response->json()['message']);
+        }
 
         return PaystackTransferObject::create($response->json()['data']);
     }
@@ -85,13 +101,15 @@ class PaystackClient extends PendingRequest
      *
      * @param string $reference
      *
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws PaystackException
      */
     public function getTransfer(string $reference): PaystackTransferObject
     {
         $response = $this->get("transfer/$reference");
 
-        $response->throw();
+        if ($response->failed()) {
+            throw PaystackException::create($response->json()['message']);
+        }
 
         return PaystackTransferObject::create($response->json(['data']));
     }

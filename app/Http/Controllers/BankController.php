@@ -21,14 +21,7 @@ class BankController extends ApiController
 
     public function index()
     {
-        try {
-            $banks = $this->client->getBanks();
-        } catch (\Throwable $exception) {
-            Log::error($exception);
-
-            return $this->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
-                ->respondWithError('Something went wrong. Please try again');
-        }
+        $banks = $this->client->getBanks();
 
         return $this->respond(['banks' => $banks]);
     }

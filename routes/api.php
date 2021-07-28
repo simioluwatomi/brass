@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TransactionEntryController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,11 +23,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::name('api.')->group(function () {
 
-Route::prefix('v1')->name('api.')->group(function () {
+    Route::get('/', function () {
+        return response()->json([
+            'status' => 'success',
+            'data'   => ['message' => 'Welcome to the Brass bank API'],
+        ]);
+    });
 
     Route::group(['middleware' => 'guest:sanctum'], function () {
         Route::post('register', RegisterController::class)->name('register');
@@ -35,6 +39,8 @@ Route::prefix('v1')->name('api.')->group(function () {
     });
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/user', UserController::class)->name('user.show');
+
         Route::post('logout', [AuthenticationController::class, 'destroy'])->name('logout');
 
         Route::get('accounts', [AccountController::class, 'index'])->name('accounts.index');

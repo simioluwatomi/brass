@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ProcessPaystackTransferWebhook;
+use App\Actions\ValidatePaystackTransferWebhook;
 use App\Models\Account;
 use App\Models\TransactionEntry;
 use App\Models\Webhook;
@@ -31,48 +33,31 @@ class PaystackTransferWebhookController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function __invoke(Request $request)
+    public function __invoke(
+        Request $request,
+        ProcessPaystackTransferWebhook $processWebhook)
     {
         if (! $this->ensureValidSignature($request)) {
             return $this->setStatusCode(Response::HTTP_BAD_REQUEST)
-                ->respondWithError('The signature is invalid.');
+                ->respondWithError('The webhook signature is invalid.');
+        }
+
+        $transferObject = $this->client->getTransfer($request->input('data')['reference']);
+
+        $transactionEntry = TransactionEntry::query()
+            ->with(['credit'])
+            ->where('reference', $transferObject->reference)
+            ->firstOrFail();
+
+        if ($transactionEntry->status != TransactionEntryStatus::PENDING) {
+            return $this->setStatusCode(Response::HTTP_FORBIDDEN)
+                ->respondWithError('Transaction is in its final state.');
         }
 
         try {
             DB::beginTransaction();
 
-            $transferObject = $this->client->getTransfer($request->input('data')['reference']);
-
-            $transactionEntry = TransactionEntry::query()
-                ->with(['credit'])
-                ->where('reference', $transferObject->reference)
-                ->firstOrFail();
-
-            if ($transactionEntry->status != TransactionEntryStatus::PENDING) {
-                return $this->setStatusCode(Response::HTTP_BAD_REQUEST)
-                    ->respondWithError('Transaction is in its final state.');
-            }
-
-            $transactionEntry->update([
-                'status' => $transferObject->status,
-                'meta_data' => $transferObject->toArray()
-            ]);
-
-            $transactionEntry->credit->first()->update([
-                'status' => $transferObject->status,
-                'meta_data' => $transferObject->toArray()
-            ]);
-
-            $account = Account::query()
-                ->where('id', $transactionEntry->debit_account_id)
-                ->lockForUpdate()
-                ->first();
-
-            $transferObject->status == TransactionEntryStatus::SUCCESS
-                ? $account->update(['book_balance' => $account->available_balance])
-                : $account->update(['available_balance' => $account->book_balance]);
-
-            Webhook::create(['vendor' => PaystackOptions::NAME, 'payload' => $request->all()]);
+            $processWebhook->execute($transferObject, $transactionEntry, $request->all());
 
             DB::commit();
 

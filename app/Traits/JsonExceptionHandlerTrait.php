@@ -41,7 +41,7 @@ trait JsonExceptionHandlerTrait
     {
         return $this->respondWithError(
             "{$exception->getMessage()}",
-            $exception->getCode()
+            Response::HTTP_BAD_REQUEST
         );
     }
 
@@ -53,7 +53,7 @@ trait JsonExceptionHandlerTrait
     protected function routeNotFound()
     {
         return $this->respondWithError(
-            'The requested URI is invalid.',
+            'The requested URL is invalid.',
             Response::HTTP_NOT_FOUND
         );
     }
@@ -86,6 +86,15 @@ trait JsonExceptionHandlerTrait
         return $this->respondWithError(
             "{$exception->getMessage()}",
             Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    protected function validationError(Throwable $exception)
+    {
+        /* @var $exception ValidationException */
+        return $this->respondWithError(
+            $exception->validator->errors()->all(),
+            Response::HTTP_UNPROCESSABLE_ENTITY
         );
     }
 
